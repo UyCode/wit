@@ -1,15 +1,21 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
 }
 
+val properties = Properties().apply {
+    rootProject.file("local.properties").reader().use(::load)
+}
+
 android {
     signingConfigs {
         create("release") {
-            storeFile = file(rootProject.properties["storeFile"].toString())
-            storePassword = rootProject.properties["storePassword"].toString()
-            keyAlias = rootProject.properties["keyAlias"].toString()
-            keyPassword = rootProject.properties["keyPassword"].toString()
+            storeFile = file(properties["storeFile"].toString())
+            storePassword = properties["storePassword"].toString()
+            keyAlias = properties["keyAlias"].toString()
+            keyPassword = properties["keyPassword"].toString()
         }
     }
     namespace = "com.uycode.wit"
