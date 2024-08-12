@@ -14,23 +14,6 @@ data class PhoneInfo(
         return "PhoneInfo(number='$number', name='$name', isp='$isp', province='$province', city='$city', zip='$zip', areaCode='$areaCode')"
     }
 
-    fun doesMatchSearchQuery(query: String): Boolean {
-        val matchingCombinations = listOf(
-            number,
-            name,
-            isp,
-            province,
-            city,
-            zip,
-            areaCode
-        )
-
-        return matchingCombinations.any {
-            it.contains(query, ignoreCase = true)
-        }
-
-    }
-
     companion object {
         // getter and setter methods
         fun PhoneInfo(): PhoneInfo {

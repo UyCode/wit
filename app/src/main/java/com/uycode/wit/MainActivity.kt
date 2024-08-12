@@ -1,10 +1,8 @@
 package com.uycode.wit
 
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Bitmap
 import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
@@ -13,7 +11,6 @@ import android.util.LruCache
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -21,6 +18,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ElevatedButton
 import androidx.compose.material3.ElevatedCard
@@ -33,9 +32,10 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults.topAppBarColors
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.rememberNavController
 import com.uycode.wit.nav.CustomNavHost
@@ -45,7 +45,9 @@ import com.uycode.wit.server.PhoneStateService
 import com.uycode.wit.ui.theme.WITTheme
 
 
-const val BLURRED_BG_KEY = "BLURRED_BG_KEY"
+const val BLURRED_BG_RECENT = "BLURRED_BG_RECENT"
+const val BLURRED_BG_SEARCH = "BLURRED_BG_SEARCH"
+const val BLURRED_BG_CONTACT = "BLURRED_BG_CONTACT"
 const val BLUR_RADIUS = 50
 
 class MainActivity : ComponentActivity() {
@@ -87,8 +89,13 @@ class MainActivity : ComponentActivity() {
                                 containerColor = Color.White,
                                 titleContentColor = MaterialTheme.colorScheme.primary,
                             ),
+
                             title = {
-                                Text("Who Is This")
+                                Icon(
+                                    imageVector = Icons.Filled.Favorite,
+                                    contentDescription = "Date Range"
+                                )
+                                Text(modifier = Modifier.padding(start = 45.dp), text = "Who Is This", color = Color.Blue)
                             }
                         )
                     },
@@ -96,7 +103,7 @@ class MainActivity : ComponentActivity() {
 
                         val width = LocalConfiguration.current.screenWidthDp.dp
                         BottomAppBar(
-                            containerColor = Color.White,
+                            containerColor = Color.Transparent,
                             contentColor = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.size(height = 95.dp, width = width)
                         ) {
@@ -104,11 +111,6 @@ class MainActivity : ComponentActivity() {
                             ElevatedCard(
                                 modifier = Modifier
                                     .fillMaxSize()
-                                    .background(
-                                        brush = Brush.verticalGradient(
-                                            colors = listOf(Color.White, Color.White)
-                                        )
-                                    )
                             ) {
                                 Column(modifier = Modifier.fillMaxSize()) {
                                     Row(
@@ -118,9 +120,11 @@ class MainActivity : ComponentActivity() {
                                             .fillMaxWidth()
                                             .padding(top = 10.dp)
                                     ) {
-                                        Column(modifier = Modifier
-                                            .weight(1f)
-                                            .padding(start = 5.dp)) {
+                                        Column(
+                                            modifier = Modifier
+                                                .weight(1f)
+                                                .padding(start = 15.dp)
+                                        ) {
                                             ElevatedButton(onClick = {
                                                 navController.navigateAndPopUp(Screens.RECENT.route)
                                             }) {
@@ -128,11 +132,11 @@ class MainActivity : ComponentActivity() {
                                                     imageVector = Screens.RECENT.icon,
                                                     contentDescription = Screens.RECENT.title
                                                 )
-                                                Text(text = Screens.RECENT.title)
+                                                Text(text = Screens.RECENT.title, fontSize = TextUnit(13f, TextUnitType.Sp))
                                             }
 
                                         }
-                                        Column(modifier = Modifier.weight(1f)) {
+                                        Column(modifier = Modifier.weight(1f).padding(start = 15.dp)) {
                                             ElevatedButton(onClick = {
                                                 navController.navigateAndPopUp(Screens.SEARCH.route)
                                             }) {
@@ -140,10 +144,10 @@ class MainActivity : ComponentActivity() {
                                                     imageVector = Screens.SEARCH.icon,
                                                     contentDescription = Screens.SEARCH.title
                                                 )
-                                                Text(text = Screens.SEARCH.title)
+                                                Text(text = Screens.SEARCH.title,fontSize = TextUnit(13f, TextUnitType.Sp))
                                             }
                                         }
-                                        Column(modifier = Modifier.weight(1f)) {
+                                        Column(modifier = Modifier.weight(1f).padding(start = 15.dp)) {
                                             ElevatedButton(onClick = {
                                                 navController.navigateAndPopUp(Screens.CONTACT.route)
                                             }) {
@@ -151,7 +155,7 @@ class MainActivity : ComponentActivity() {
                                                     imageVector = Screens.CONTACT.icon,
                                                     contentDescription = Screens.CONTACT.title
                                                 )
-                                                Text(text = Screens.CONTACT.title)
+                                                Text(text = Screens.CONTACT.title,fontSize = TextUnit(11f, TextUnitType.Sp))
                                             }
                                         }
                                     }
@@ -163,7 +167,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize()
                 ) { innerPadding ->
 
-                    CustomNavHost(navController = navController, modifier = Modifier.padding(innerPadding))
+                    CustomNavHost(
+                        navController = navController,
+                        modifier = Modifier.padding(innerPadding)
+                    )
 
                 }
             }

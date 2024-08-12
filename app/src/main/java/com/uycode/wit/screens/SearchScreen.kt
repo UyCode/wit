@@ -35,14 +35,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.uycode.wit.BLURRED_BG_KEY
+import com.uycode.wit.BLURRED_BG_SEARCH
 import com.uycode.wit.BLUR_RADIUS
 import com.uycode.wit.ISPEnum
 import com.uycode.wit.MainActivity
 import com.uycode.wit.PhoneInfo
-import com.uycode.wit.R
 import com.uycode.wit.geo.PhoneNumberLookup
 import com.uycode.wit.geo.algo.LookupAlgorithm
+import com.uycode.wit.util.getResource
 import com.uycode.wit.util.reformatPhoneNumber
 import dev.jakhongirmadaminov.glassmorphiccomposables.fastblur
 import dev.shreyaspatil.capturable.Capturable
@@ -63,7 +63,7 @@ fun SearchScreen() {
     lookup.initialize(LocalContext.current)
     lookup.with(LookupAlgorithm.IMPL.SEQUENCE)
 
-    var capturedBitmap by remember { mutableStateOf<Bitmap?>(MainActivity.getInstance().memoryCache[BLURRED_BG_KEY]) }
+    var capturedBitmap by remember { mutableStateOf<Bitmap?>(MainActivity.getInstance().memoryCache[BLURRED_BG_SEARCH]) }
 
     Box(modifier = Modifier.fillMaxSize()) {
 
@@ -75,7 +75,7 @@ fun SearchScreen() {
                 bitmap?.let {
                     fastblur(it.asAndroidBitmap(), 1f, BLUR_RADIUS)?.let { fastBlurred ->
                         // Bitmap is captured successfully. Do something with it!
-                        MainActivity.getInstance().memoryCache.put(BLURRED_BG_KEY, fastBlurred)
+                        MainActivity.getInstance().memoryCache.put(BLURRED_BG_SEARCH, fastBlurred)
                         capturedBitmap = fastBlurred
                     }
                 }
@@ -83,7 +83,7 @@ fun SearchScreen() {
 
         ) {
             Image(
-                painter = painterResource(id = R.drawable.bg_autumn),
+                painter = getResource("bg_search.jpg"),
                 contentDescription = "",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop

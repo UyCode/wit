@@ -68,7 +68,7 @@ open class BinarySearchAlgorithm(data: ByteArray) : LookupAlgorithm(data) {
         return phoneNumberPrefix.compareTo(key)
     }
 
-    protected fun parseGeo(src: String): PhoneGeoInfo {
+    private fun parseGeo(src: String): PhoneGeoInfo {
         val geos = src.split("|")
         if (geos.size < 4) {
             throw IllegalStateException("Content format error")
@@ -76,7 +76,7 @@ open class BinarySearchAlgorithm(data: ByteArray) : LookupAlgorithm(data) {
         return PhoneGeoInfo(geos[0], geos[1], geos[2], geos[3])
     }
 
-    protected fun detectInfoLength(infoStartIndex: Int, byteBuffer: ByteBuffer): Int {
+    private fun detectInfoLength(infoStartIndex: Int, byteBuffer: ByteBuffer): Int {
         byteBuffer.position(infoStartIndex)
         while (byteBuffer.get() != 0.toByte()) {
         }

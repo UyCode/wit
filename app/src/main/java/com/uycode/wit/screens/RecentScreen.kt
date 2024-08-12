@@ -42,16 +42,16 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import com.uycode.wit.BLURRED_BG_KEY
+import com.uycode.wit.BLURRED_BG_RECENT
 import com.uycode.wit.BLUR_RADIUS
 import com.uycode.wit.Constants
 import com.uycode.wit.ISPEnum
 import com.uycode.wit.MainActivity
 import com.uycode.wit.PhoneInfo
-import com.uycode.wit.R
 import com.uycode.wit.geo.PhoneNumberLookup
 import com.uycode.wit.geo.algo.LookupAlgorithm
 import com.uycode.wit.util.ShowDialog
+import com.uycode.wit.util.getResource
 import com.uycode.wit.util.reformatPhoneNumber
 import dev.jakhongirmadaminov.glassmorphiccomposables.GlassmorphicColumn
 import dev.jakhongirmadaminov.glassmorphiccomposables.Place
@@ -155,7 +155,7 @@ fun PhoneRecentList(numbers: List<PhoneInfo>, context: Context) {
 
     val scrollState = rememberScrollState()
 
-    var capturedBitmap by remember { mutableStateOf<Bitmap?>(MainActivity.getInstance().memoryCache[BLURRED_BG_KEY]) }
+    var capturedBitmap by remember { mutableStateOf<Bitmap?>(MainActivity.getInstance().memoryCache[BLURRED_BG_RECENT]) }
 
     val childMeasures = remember {
         mutableStateListOf<Place>().apply {
@@ -172,7 +172,7 @@ fun PhoneRecentList(numbers: List<PhoneInfo>, context: Context) {
                 bitmap?.let {
                     fastblur(it.asAndroidBitmap(), 1f, BLUR_RADIUS)?.let { fastBlurred ->
                         // Bitmap is captured successfully. Do something with it!
-                        MainActivity.getInstance().memoryCache.put(BLURRED_BG_KEY, fastBlurred)
+                        MainActivity.getInstance().memoryCache.put(BLURRED_BG_RECENT, fastBlurred)
                         capturedBitmap = fastBlurred
                     }
                 }
@@ -180,7 +180,7 @@ fun PhoneRecentList(numbers: List<PhoneInfo>, context: Context) {
 
         ) {
             Image(
-                painter = painterResource(id = R.drawable.bg_autumn),
+                painter = getResource("bg_recent.jpg"),
                 contentDescription = "",
                 modifier = Modifier.fillMaxSize(),
                 contentScale = ContentScale.Crop

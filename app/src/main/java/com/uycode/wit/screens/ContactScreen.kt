@@ -42,7 +42,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.TextUnitType
 import androidx.compose.ui.unit.dp
-import com.uycode.wit.BLURRED_BG_KEY
+import com.uycode.wit.BLURRED_BG_CONTACT
 import com.uycode.wit.BLUR_RADIUS
 import com.uycode.wit.Constants
 import com.uycode.wit.ISPEnum
@@ -52,6 +52,7 @@ import com.uycode.wit.R
 import com.uycode.wit.geo.PhoneNumberLookup
 import com.uycode.wit.geo.algo.LookupAlgorithm
 import com.uycode.wit.util.ShowDialog
+import com.uycode.wit.util.getResource
 import com.uycode.wit.util.reformatPhoneNumber
 import dev.jakhongirmadaminov.glassmorphiccomposables.GlassmorphicColumn
 import dev.jakhongirmadaminov.glassmorphiccomposables.Place
@@ -84,7 +85,7 @@ fun ContactInfo(numbers: List<PhoneInfo>, context: Context) {
 
     val scrollState = rememberScrollState()
 
-    var capturedBitmap by remember { mutableStateOf<Bitmap?>(MainActivity.getInstance().memoryCache[BLURRED_BG_KEY]) }
+    var capturedBitmap by remember { mutableStateOf<Bitmap?>(MainActivity.getInstance().memoryCache[BLURRED_BG_CONTACT]) }
 
     val captureController = rememberCaptureController()
     Capturable(
@@ -94,7 +95,7 @@ fun ContactInfo(numbers: List<PhoneInfo>, context: Context) {
             bitmap?.let {
                 fastblur(it.asAndroidBitmap(), 1f, BLUR_RADIUS)?.let { fastBlurred ->
                     // Bitmap is captured successfully. Do something with it!
-                    MainActivity.getInstance().memoryCache.put(BLURRED_BG_KEY, fastBlurred)
+                    MainActivity.getInstance().memoryCache.put(BLURRED_BG_CONTACT, fastBlurred)
                     capturedBitmap = fastBlurred
                 }
             }
@@ -102,7 +103,7 @@ fun ContactInfo(numbers: List<PhoneInfo>, context: Context) {
 
     ) {
         Image(
-            painter = painterResource(id = R.drawable.bg_autumn),
+            painter = getResource("bg_contact.jpg"),
             contentDescription = "",
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop
@@ -234,103 +235,6 @@ fun ContactInfo(numbers: List<PhoneInfo>, context: Context) {
         }
     }
 }
-
-/*
-    LazyColumn(
-        contentPadding = PaddingValues(top = 1.dp, start = 5.dp, bottom = 1.dp)
-    ) {
-
-        items(numbers.size) { index ->
-            val a = numbers[index]
-            Card(
-                modifier = Modifier
-                    .size(width = 450.dp, height = 95.dp)
-                    .clickable(onClick = {
-                        shouldShowDialog = !shouldShowDialog; phoneInfo = a
-                    })
-                    .padding(5.dp)
-            ) {
-                Box(
-                    modifier = Modifier
-                        .fillMaxSize()
-                        .background(
-                            brush = Brush.verticalGradient(
-                                colors = listOf(Color.Cyan, Color.White)
-                            )
-                        )
-                ) {
-                    Column {
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(all = 15.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Column {
-                                Text(
-                                    text = a.name,
-                                    modifier = Modifier.padding(PaddingValues(start = 5.dp)),
-                                    fontSize = TextUnit(4.0F, TextUnitType.Em),
-                                    textAlign = TextAlign.Left,
-                                )
-                            }
-                            Column {
-                                Text(
-                                    text = a.province,
-                                    modifier = Modifier.padding(PaddingValues(start = 35.dp)),
-                                    fontSize = TextUnit(4.0F, TextUnitType.Em)
-                                )
-                            }
-                            Column {
-                                Text(
-                                    text = a.city,
-                                    modifier = Modifier.padding(PaddingValues(start = 55.dp)),
-                                    fontSize = TextUnit(4.0F, TextUnitType.Em)
-                                )
-                            }
-
-
-                        }
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.padding(start = 15.dp, top = 0.dp),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Column {
-                                Text(
-                                    text = a.number,
-                                    modifier = Modifier.padding(PaddingValues(start = 5.dp)),
-                                    fontSize = TextUnit(4.0F, TextUnitType.Em)
-                                )
-                            }
-                            Column {
-                                Icon(
-                                    painter = painterResource(ISPEnum.getByNameCn(a.isp).icon),
-                                    contentDescription = "hello",
-                                    modifier = Modifier.padding(PaddingValues(start = 35.dp))
-                                )
-                            }
-                            Column {
-                                Text(
-                                    text = a.isp,
-                                    modifier = Modifier.padding(PaddingValues(start = 5.dp)),
-                                    fontSize = TextUnit(4.5F, TextUnitType.Em)
-                                )
-                            }
-                        }
-
-                    }
-                    HorizontalDivider(
-                        modifier = Modifier.padding(PaddingValues(top = 2.dp)),
-                        thickness = 0.dp
-                    )
-
-                }
-
-            }
-        }
-    }
-*/
-
 
 fun readContactsPhoneNumbers(context: Context): List<PhoneInfo> {
     val phoneNumbers = mutableListOf<Map<String, String>>()
