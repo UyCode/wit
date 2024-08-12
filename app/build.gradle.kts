@@ -6,10 +6,10 @@ plugins {
 android {
     signingConfigs {
         create("release") {
-            storeFile = file("D:\\Users\\oykoz\\AndroidStudioProjects\\keystore\\wit-keystore.jks")
-            storePassword = "142857"
-            keyAlias = "wit-key"
-            keyPassword = "142857"
+            storeFile = file(rootProject.properties["storeFile"].toString())
+            storePassword = rootProject.properties["storePassword"].toString()
+            keyAlias = rootProject.properties["keyAlias"].toString()
+            keyPassword = rootProject.properties["keyPassword"].toString()
         }
     }
     namespace = "com.uycode.wit"
